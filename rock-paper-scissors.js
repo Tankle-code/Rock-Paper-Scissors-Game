@@ -10,3 +10,7 @@ function getComputerChoice() {
 function getHumanChoice() {
     return prompt("Do you want to choose Rock, Scissors, or Paper?")
 }
+
+// Declare players score variables
+let computerScore = 0;
+let humanScore = 0;
