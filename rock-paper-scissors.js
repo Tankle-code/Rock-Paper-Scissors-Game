@@ -7,11 +7,6 @@ function getComputerChoice() {
 }
 
 // Get the Human choice 
-function getHumanChoice() {
-    let choice = prompt("Do you want to choose Rock, Scissors, or Paper?");
-    if (choice) {choice = choice.trim(); return choice.at(0).toUpperCase() + choice.slice(1).toLowerCase()}
-    else {return choice}
-}
 
 // Declare players score variables
 let computerScore = 0;
@@ -19,42 +14,63 @@ let humanScore = 0;
 
 // Write the logic to play a single round
 
-
-function playRound() {
-    humanSelection = getHumanChoice();
-    computerSelection = getComputerChoice(); 
-    console.log (`you chose: ${humanSelection}`);
-    console.log (`computer chose: ${computerSelection}`);
+function playRound(humanSelection,computerSelection) {
+   
+    humanSelection = humanSelection.at(0).toUpperCase()+humanSelection.slice(1).toLowerCase();
+    const roundResult = document.querySelector("#roundResult");
     if (humanSelection === computerSelection) {
-        console.log ("Tie, let's try again !")
+        roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"Tie, let's try again !"`
     } else if (humanSelection === "Paper" && computerSelection ==="Rock") {humanScore++;
-        console.log ("You win! Paper beats Rock")
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You win! Paper beats Rock"`
     } else if (humanSelection=== "Paper" && computerSelection ==="Scissors") {computerScore++;
-        console.log ("You lose! Scissors beats Paper") 
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You lose! Scissors beats Paper"` 
     } else if (humanSelection === "Scissors" && computerSelection ==="Paper") {humanScore++;
-        console.log ("You win! Scissors beats Paper") 
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You win! Scissors beats Paper"`
     } else if (humanSelection === "Scissors" && computerSelection ==="Rock") {computerScore++;
-        console.log ("You lose! Rock beats Scissors") 
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You lose! Rock beats Scissors"`
     } else if (humanSelection === "Rock" && computerSelection ==="Paper") {computerScore++;
-        console.log ("You lose! Paper beats Rock")
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You lose! Paper beats Rock"`
     } else if (humanSelection === "Rock" && computerSelection ==="Scissors") {humanScore++;
-        console.log ("You win! Rock beats Scissors")
-    };
-    console.log (`you won ${humanScore} times!`);
-    console.log (`computer won ${computerScore} times!`);
+         roundResult.textContent=`you chose ${humanSelection}, computer chose ${computerSelection}, \n"You win! Rock beats Scissors"`
+    }
+    
+    const runningScore = document.querySelector("#runningScore");
+    runningScore.textContent= `you won ${humanScore} times!, computer won ${computerScore} times!`;
+    checkWinner();
 }
 
 // Play 5 rounds
-    console.log(`Round 1`); playRound();
 
-    console.log(`\nRound 2`); playRound();
+    const humanSelectionButtons = document.querySelectorAll("#humanSelectionButtons button");
+    humanSelectionButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const humanSelection = button.id;
+            const computerSelection = getComputerChoice(); 
+            playRound(humanSelection,computerSelection);
+        })
+    })
 
-    console.log(`\nRound 3`); playRound();
+    // declare the champion
+    function disabledButtons () {
+        humanSelectionButtons.forEach((button) => {button.disabled = true}
+    )
+    }
+    const declareWinner = document.querySelector("#declareWinner");
+    function checkWinner() {
+    if(humanScore === 5) {declareWinner.textContent = "You Win! \nYou are much more intelligent than computer!"; disabledButtons()}
+    else if(computerScore === 5) {declareWinner.textContent = "What a pathetic! \nYou lost to a non-brain machine!"; disabledButtons()}
+}
 
-    console.log(`\nRound 4`); playRound();
+function replayGame () {
+    humanScore = 0;
+    computerScore = 0;
+    roundResult.textContent ="";
+    runningScore.textContent ="";
+    declareWinner.textContent ="";
+    humanSelectionButtons.forEach((button) => {button.disabled = false});
+}
 
-    console.log(`\nRound 5`); playRound();
+const resetGame = document.querySelector("#resetGame");
+resetGame.addEventListener("click",() => {replayGame()});
+    
 
-if (humanScore>computerScore) {console.log ("you are the champion!")} 
-else if (humanScore<computerScore) {console.log ("you lost to a machine, what a dissapointment!")}
-else {console.log ("Tie in the End")}
